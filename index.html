@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboards · Almoxarifado Central</title>
+<style>
+  :root{
+    --verde: #95C33D;
+    --verde-escuro: #7CA632;
+    --preto: #262626;
+    --cinza-claro: #F2F2F2;
+    --cinza-texto: #6B6B6B;
+    --branco: #FFFFFF;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family: -apple-system, "Inter", "Segoe UI", Roboto, sans-serif;
+    background: var(--cinza-claro);
+    color: var(--preto);
+    min-height: 100vh;
+  }
+
+  /* topo */
+  header{
+    background: var(--preto);
+    padding: 28px 5vw 24px;
+    color: var(--branco);
+  }
+  .eyebrow{
+    color: var(--verde);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  header h1{
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  header p{
+    color: #B5B5B5;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  nav.top-links{
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+  }
+  nav.top-links a{
+    color: var(--branco);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    transition: background .15s ease;
+  }
+  nav.top-links a:hover, nav.top-links a:focus-visible{
+    background: var(--verde);
+    color: var(--preto);
+    outline: none;
+  }
+
+  main{
+    padding: 32px 5vw 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .card{
+    background: var(--branco);
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: transform .18s ease, box-shadow .18s ease;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .card:hover, .card:focus-visible{
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(38,38,38,0.14);
+    outline: none;
+  }
+
+  .card-thumb{
+    height: 130px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 34px;
+    color: var(--branco);
+    position: relative;
+  }
+  /* variações de cor do topo do card por família de conteúdo — puramente visual/organizacional */
+  .thumb-compras{ background: linear-gradient(135deg, var(--verde), var(--verde-escuro)); }
+  .thumb-estoque{ background: linear-gradient(135deg, #4A4A4A, var(--preto)); }
+  .thumb-pneus{ background: linear-gradient(135deg, #3E7CB1, #2C5C87); }
+  .thumb-desempenho{ background: linear-gradient(135deg, #C99A3E, #A97C28); }
+
+  .card-body{
+    padding: 16px 18px 18px;
+    display:flex;
+    flex-direction: column;
+    gap: 4px;
+    flex:1;
+  }
+  .card-body h3{
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .card-body span.desc{
+    font-size: 12.5px;
+    color: var(--cinza-texto);
+    line-height: 1.4;
+  }
+  .status{
+    margin-top: 10px;
+    display:inline-flex;
+    align-items:center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .status.ativo{ color: var(--verde-escuro); }
+  .status.construcao{ color: #B5892B; }
+  .status::before{
+    content:"";
+    width:6px; height:6px;
+    border-radius:50%;
+    background: currentColor;
+    display:inline-block;
+  }
+
+  .section-title{
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cinza-texto);
+    margin: 28px 0 14px;
+  }
+  .section-title:first-child{ margin-top: 0; }
+
+  footer{
+    text-align:center;
+    font-size: 11px;
+    color: var(--cinza-texto);
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Grupo GBS</div>
+  <h1>Dashboards · Almoxarifado Central</h1>
+  <p>Painéis de compras, estoque e desempenho da frota</p>
+  <nav class="top-links">
+    <a href="dashboards.html">▶ Modo TV (rodízio automático)</a>
+  </nav>
+</header>
+
+<main>
+
+  <div class="section-title">Compras</div>
+  <div class="grid">
+
+    <a class="card" href="https://app.powerbi.com/view?r=SEU_LINK_AQUI_1" target="_blank" rel="noopener">
+      <div class="card-thumb thumb-compras">📦</div>
+      <div class="card-body">
+        <h3>Pedidos de Compra</h3>
+        <span class="desc">Painel geral de PCs por empresa, comprador e data</span>
+        <span class="status ativo">Acessar</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://app.powerbi.com/view?r=SEU_LINK_AQUI_2" target="_blank" rel="noopener">
+      <div class="card-thumb thumb-compras">📊</div>
+      <div class="card-body">
+        <h3>Curva ABC / Pareto</h3>
+        <span class="desc">Classificação de itens por criticidade de consumo</span>
+        <span class="status ativo">Acessar</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://app.powerbi.com/view?r=SEU_LINK_AQUI_3" target="_blank" rel="noopener">
+      <div class="card-thumb thumb-desempenho">🧑‍💼</div>
+      <div class="card-body">
+        <h3>Performance de Compradores</h3>
+        <span class="desc">Prazo médio, volume e giro por comprador</span>
+        <span class="status construcao">Em Construção</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-title">Estoque e Frota</div>
+  <div class="grid">
+
+    <a class="card" href="https://app.powerbi.com/view?r=SEU_LINK_AQUI_4" target="_blank" rel="noopener">
+      <div class="card-thumb thumb-estoque">🗄️</div>
+      <div class="card-body">
+        <h3>Posição de Estoque</h3>
+        <span class="desc">Saldo, cobertura e itens críticos por depósito</span>
+        <span class="status ativo">Acessar</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://app.powerbi.com/view?r=SEU_LINK_AQUI_5" target="_blank" rel="noopener">
+      <div class="card-thumb thumb-pneus">🛞</div>
+      <div class="card-body">
+        <h3>Performance de Pneus</h3>
+        <span class="desc">Eficiência e sucata por marca — Pirelli x Michelin</span>
+        <span class="status ativo">Acessar</span>
+      </div>
+    </a>
+
+  </div>
+
+</main>
+
+<footer>Atualizado manualmente · Grupo GBS</footer>
+
+</body>
+</html>
