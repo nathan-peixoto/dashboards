@@ -12,8 +12,6 @@
     --cinza-claro: #F2F2F2;
     --cinza-texto: #6B6B6B;
     --branco: #FFFFFF;
-    --sidebar-w: 250px;
-    --sidebar-w-collapsed: 56px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
@@ -52,7 +50,7 @@
     display: flex;
     gap: 10px;
   }
-  nav.top-links a, nav.top-links button{
+  nav.top-links a{
     color: var(--branco);
     text-decoration: none;
     font-size: 13px;
@@ -60,189 +58,24 @@
     padding: 8px 14px;
     border-radius: 8px;
     background: rgba(255,255,255,0.08);
-    border: none;
-    font-family: inherit;
-    cursor: pointer;
     transition: background .15s ease;
   }
-  nav.top-links a:hover, nav.top-links a:focus-visible,
-  nav.top-links button:hover, nav.top-links button:focus-visible{
+  nav.top-links a:hover, nav.top-links a:focus-visible{
     background: var(--verde);
     color: var(--preto);
     outline: none;
   }
-  .btn-menu{ display:none; }
 
-  /* layout geral: sidebar fixo ao lado + conteúdo */
-  .app{
-    display: flex;
-    align-items: flex-start;
+  main{
+    padding: 32px 5vw 60px;
     max-width: 1400px;
     margin: 0 auto;
   }
 
-  /* sidebar estilo app, sempre visível ao lado no desktop */
-  .sidebar{
-    width: var(--sidebar-w);
-    flex-shrink: 0;
-    background: var(--branco);
-    border-right: 1px solid rgba(0,0,0,0.08);
-    padding: 20px 14px;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
-    transition: width .22s ease;
-  }
-  .sidebar.collapsed{ width: var(--sidebar-w-collapsed); padding: 20px 8px; }
-
-  .sidebar-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    font-weight:700;
-    font-size:14px;
-    margin-bottom: 16px;
-    gap: 6px;
-  }
-  .sidebar.collapsed .sidebar-header{ justify-content:center; }
-  .sidebar-title{ white-space: nowrap; overflow:hidden; }
-  .sidebar.collapsed .sidebar-title{ display:none; }
-
-  .sidebar-header-actions{ display:flex; gap:2px; }
-  .icon-btn{
-    background:none;
-    border:none;
-    cursor:pointer;
-    font-size:14px;
-    color: var(--cinza-texto);
-    width:26px;
-    height:26px;
-    border-radius:6px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-  }
-  .icon-btn:hover, .icon-btn:focus-visible{ background: var(--cinza-claro); color: var(--preto); outline:none; }
-  #btn-collapse-sidebar{ transition: transform .22s ease; }
-  .sidebar.collapsed #btn-collapse-sidebar{ transform: scaleX(-1); }
-
-  #btn-close-sidebar{ display:none; }
-
-  #btn-collapsed-search{ display:none; margin: 0 auto 14px; }
-  .sidebar.collapsed #btn-collapsed-search{ display:flex; }
-
-  .search-box{ margin: 0 0 14px; }
-  .sidebar.collapsed .search-box{ display:none; }
-  .search-box input{
-    width:100%;
-    padding:9px 12px;
-    border:1px solid rgba(0,0,0,.12);
-    border-radius:9px;
-    font-size:13px;
-    font-family:inherit;
-  }
-  .search-box input:focus{
-    outline:none;
-    border-color: var(--verde);
-    box-shadow: 0 0 0 3px rgba(149,195,61,.25);
-  }
-
-  .sidebar.collapsed .tree{ display:none; }
-
-  .tree summary{
-    cursor:pointer;
-    list-style: revert;
-    font-weight:700;
-    font-size:13px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:7px 6px;
-    border-radius:8px;
-    user-select:none;
-  }
-  .tree summary:hover{ background: var(--cinza-claro); }
-  .tree summary::marker{ color: var(--cinza-texto); }
-
-  .tree-cat{ margin-bottom:2px; }
-  .tree-sub{
-    margin: 2px 0 4px 12px;
-    padding-left: 8px;
-    border-left: 2px solid var(--cinza-claro);
-  }
-  .tree-sub summary{ font-size:12.5px; font-weight:600; color: var(--cinza-texto); }
-
-  .count{
-    font-size:11px;
-    color: var(--cinza-texto);
-    background: var(--cinza-claro);
-    padding: 1px 7px;
-    border-radius: 20px;
-    margin-left: 6px;
-  }
-
-  .tree-item{
-    width:100%;
-    display:flex;
-    align-items:center;
-    background:none;
-    border:none;
-    text-align:left;
-    padding: 7px 8px 7px 24px;
-    font-size:13px;
-    font-family: inherit;
-    color: var(--preto);
-    border-radius:8px;
-    cursor:pointer;
-  }
-  .tree-item:hover, .tree-item:focus-visible{
-    background: var(--cinza-claro);
-    outline: none;
-  }
-  .tree-icon{ margin-right:8px; font-size:13px; }
-
-  /* overlay mobile */
-  .overlay{ display:none; }
-
-  /* conteúdo */
-  .content-wrap{ flex:1; min-width:0; }
-  main{
-    padding: 32px 5vw 60px;
-  }
-
-  .section-title{
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--cinza-texto);
-    margin: 28px 0 14px;
-  }
-  .cat-block:first-child .section-title{ margin-top: 0; }
-
-  .subsection-title{
-    font-size: 11.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--cinza-texto);
-    margin: 2px 0 10px 2px;
-  }
-
-  .empty-state{
-    color: var(--cinza-texto);
-    font-size: 14px;
-    padding: 40px 0;
-    text-align: center;
-  }
-
   .grid{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 20px;
-    margin-bottom: 8px;
   }
 
   .card{
@@ -262,11 +95,6 @@
     box-shadow: 0 10px 24px rgba(38,38,38,0.14);
     outline: none;
   }
-  .card.highlight{ animation: pulseVerde 1.1s ease; }
-  @keyframes pulseVerde{
-    0%{ box-shadow: 0 0 0 0 rgba(149,195,61,.55); }
-    100%{ box-shadow: 0 0 0 14px rgba(149,195,61,0); }
-  }
 
   .card-thumb{
     height: 130px;
@@ -278,11 +106,13 @@
     position: relative;
     overflow: hidden;
   }
+  /* variações de cor do topo do card por família de conteúdo — usadas como fundo/fallback enquanto não há imagem */
   .thumb-compras{ background: linear-gradient(135deg, var(--verde), var(--verde-escuro)); }
   .thumb-estoque{ background: linear-gradient(135deg, #4A4A4A, var(--preto)); }
   .thumb-pneus{ background: linear-gradient(135deg, #3E7CB1, #2C5C87); }
   .thumb-desempenho{ background: linear-gradient(135deg, #C99A3E, #A97C28); }
 
+  /* imagem de prévia do dashboard: cobre o gradiente/ícone quando carrega com sucesso */
   .card-thumb .thumb-img{
     position: absolute;
     inset: 0;
@@ -291,7 +121,11 @@
     object-fit: cover;
     object-position: top;
   }
-  .card-thumb .thumb-fallback{ position: relative; z-index: 0; }
+  /* ícone permanece por baixo como fallback caso a imagem não exista/falhe */
+  .card-thumb .thumb-fallback{
+    position: relative;
+    z-index: 0;
+  }
 
   .card-body{
     padding: 16px 18px 18px;
@@ -300,8 +134,15 @@
     gap: 4px;
     flex:1;
   }
-  .card-body h3{ font-size: 15px; font-weight: 700; }
-  .card-body span.desc{ font-size: 12.5px; color: var(--cinza-texto); line-height: 1.4; }
+  .card-body h3{
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .card-body span.desc{
+    font-size: 12.5px;
+    color: var(--cinza-texto);
+    line-height: 1.4;
+  }
   .status{
     margin-top: 10px;
     display:inline-flex;
@@ -320,351 +161,72 @@
     display:inline-block;
   }
 
+  .section-title{
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cinza-texto);
+    margin: 28px 0 14px;
+  }
+  .section-title:first-child{ margin-top: 0; }
+
   footer{
     text-align:center;
     font-size: 11px;
     color: var(--cinza-texto);
     padding: 20px;
   }
-
-  /* responsivo: sidebar vira gaveta no mobile (recolher fica desativado) */
-  @media (max-width: 880px){
-    .btn-menu{ display:inline-flex; }
-    #btn-close-sidebar{ display:inline-block; }
-    #btn-collapse-sidebar{ display:none; }
-
-    .app{ display:block; }
-
-    .sidebar{
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 280px;
-      height: 100vh;
-      border-right:none;
-      z-index: 60;
-      transition: left .25s ease;
-      box-shadow: 8px 0 24px rgba(0,0,0,.18);
-    }
-    .sidebar.open{ left: 0; }
-
-    /* neutraliza o estado "recolhido" dentro da gaveta mobile */
-    .sidebar.collapsed{ width: 280px; padding: 20px 14px; }
-    .sidebar.collapsed .sidebar-title,
-    .sidebar.collapsed .search-box,
-    .sidebar.collapsed .tree{ display:block; }
-    .sidebar.collapsed #btn-collapsed-search{ display:none; }
-
-    .overlay.show{
-      display:block;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.4);
-      z-index: 50;
-    }
-  }
 </style>
 </head>
 <body>
 
-<div class="app">
+<header>
+  <div class="eyebrow">Grupo GBS</div>
+  <h1>Dashboards · Gestão de Suprimentos</h1>
+  <p>Relatórios desenvolvidos com Power BI</p>
+  <nav class="top-links">
+    <a href="dashboards.html">▶ Modo TV (Apresentação)</a>
+  </nav>
+</header>
 
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <span class="sidebar-title">Dashboards</span>
-      <div class="sidebar-header-actions">
-        <button id="btn-collapse-sidebar" class="icon-btn" aria-label="Recolher menu" title="Recolher menu">«</button>
-        <button id="btn-close-sidebar" class="icon-btn" aria-label="Fechar menu">✕</button>
-      </div>
-    </div>
+<main>
 
-    <button id="btn-collapsed-search" class="icon-btn" aria-label="Buscar dashboard" title="Buscar dashboard">🔍</button>
+  <div class="section-title">Compras</div>
+  <div class="grid">
 
-    <div class="search-box" id="search-box">
-      <input type="search" id="search-input" placeholder="Buscar por nome..." aria-label="Buscar dashboard por nome">
-    </div>
-
-    <nav class="tree" id="tree"><!-- gerado via JS a partir de "dashboards" --></nav>
-  </aside>
-
-  <div class="overlay" id="overlay"></div>
-
-  <div class="content-wrap">
-    <header>
-      <div class="eyebrow">Grupo GBS</div>
-      <h1>Dashboards · Gestão de Suprimentos</h1>
-      <p>Relatórios desenvolvidos com Power BI</p>
-      <nav class="top-links">
-        <button id="btn-open-sidebar" class="btn-menu" aria-label="Abrir menu de dashboards">☰ Menu</button>
-        <a href="dashboards.html">▶ Modo TV (Apresentação)</a>
-      </nav>
-    </header>
-
-    <main>
-      <div class="content" id="content"><!-- gerado via JS a partir de "dashboards" --></div>
-    </main>
-
-    <footer>Atualizado manualmente · Grupo GBS</footer>
-  </div>
-
-</div>
-
-<script>
-  // ---------------------------------------------------------------
-  // FONTE DE DADOS: para adicionar um novo dashboard, basta incluir
-  // um novo objeto aqui. "subcategoria" é opcional — deixe null se
-  // a categoria não tiver subpastas.
-  // ---------------------------------------------------------------
-  const dashboards = [
-    {
-      id: 'pedidos-compra',
-      categoria: 'Compras',
-      subcategoria: null,
-      titulo: 'Pedidos de Compra',
-      desc: 'Análise do histórico de pedidos de compras.',
-      url: 'https://app.powerbi.com/view?r=eyJrIjoiZDRiZGYwZmEtMjVkMy00N2I3LTk0YjMtYjZkYmU0NmQ3YTkxIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9',
-      thumb: 'assets/thumbs/pedidos-compra.png',
-      icone: null,
-      thumbClasse: 'thumb-compras',
-      status: 'ativo'
-    },
-    {
-      id: 'estudo-pneus',
-      categoria: 'Borracharia',
-      subcategoria: null,
-      titulo: 'Estudo de Pneus',
-      desc: 'Comparação entre marcas Pirelli e Michelin',
-      url: 'https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574',
-      thumb: 'assets/thumbs/estudo-pneus.png',
-      icone: null,
-      thumbClasse: 'thumb-pneus',
-      status: 'ativo'
-    }
-  ];
-
-  function normalize(str){
-    return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  }
-
-  function agrupar(){
-    const mapa = new Map();
-    dashboards.forEach(d => {
-      if(!mapa.has(d.categoria)) mapa.set(d.categoria, new Map());
-      const sub = d.subcategoria || '__raiz__';
-      const porCategoria = mapa.get(d.categoria);
-      if(!porCategoria.has(sub)) porCategoria.set(sub, []);
-      porCategoria.get(sub).push(d);
-    });
-    return mapa;
-  }
-
-  function montarCard(d){
-    const a = document.createElement('a');
-    a.className = 'card';
-    a.href = d.url;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.id = 'card-' + d.id;
-    a.dataset.search = normalize([d.categoria, d.subcategoria || '', d.titulo, d.desc].join(' '));
-    a.innerHTML = `
-      <div class="card-thumb ${d.thumbClasse}">
-        <img class="thumb-img" src="${d.thumb}" alt="Prévia do dashboard ${d.titulo}" onerror="this.remove()">
-        <span class="thumb-fallback">${d.icone}</span>
+    <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiZDRiZGYwZmEtMjVkMy00N2I3LTk0YjMtYjZkYmU0NmQ3YTkxIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9" target="_blank" rel="noopener">
+      <div class="card-thumb thumb-compras">
+        <img class="thumb-img" src="assets/thumbs/pedidos-compra.png" alt="Prévia do dashboard Pedidos de Compra" onerror="this.remove()">
       </div>
       <div class="card-body">
-        <h3>${d.titulo}</h3>
-        <span class="desc">${d.desc}</span>
-        <span class="status ${d.status}">${d.status === 'ativo' ? 'Acessar' : 'Em construção'}</span>
-      </div>`;
-    return a;
-  }
+        <h3>Pedidos de Compra</h3>
+        <span class="desc">Princípio de Pareto e Curva ABC</span>
+        <span class="status ativo">Acessar</span>
+      </div>
+    </a>
 
-  function renderConteudo(){
-    const content = document.getElementById('content');
-    content.innerHTML = '';
-    const grupos = agrupar();
+  </div>
 
-    grupos.forEach((porSub, categoria) => {
-      const section = document.createElement('section');
-      section.className = 'cat-block';
+  <div class="section-title">Borracharia</div>
+  <div class="grid">
 
-      const titulo = document.createElement('div');
-      titulo.className = 'section-title';
-      titulo.textContent = categoria;
-      section.appendChild(titulo);
+    <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574" target="_blank" rel="noopener">
+      <div class="card-thumb thumb-compras">
+        <img class="thumb-img" src="assets/thumbs/estudo-pneus.png" alt="Prévia do dashboard Estudo de Pneus" onerror="this.remove()">
+      </div>
+      <div class="card-body">
+        <h3>Estudo de Pneus</h3>
+        <span class="desc">Comparação entre marcas Pirelli e Michelin</span>
+        <span class="status ativo">Acessar</span>
+      </div>
+    </a>
 
-      porSub.forEach((itens, sub) => {
-        const subBlock = document.createElement('div');
-        subBlock.className = 'sub-block';
+  </div>
 
-        if(sub !== '__raiz__'){
-          const subTitulo = document.createElement('div');
-          subTitulo.className = 'subsection-title';
-          subTitulo.textContent = sub;
-          subBlock.appendChild(subTitulo);
-        }
+</main>
 
-        const grid = document.createElement('div');
-        grid.className = 'grid';
-        itens.forEach(d => grid.appendChild(montarCard(d)));
-        subBlock.appendChild(grid);
-
-        section.appendChild(subBlock);
-      });
-
-      content.appendChild(section);
-    });
-
-    const vazio = document.createElement('p');
-    vazio.id = 'empty-state';
-    vazio.className = 'empty-state';
-    vazio.hidden = true;
-    vazio.textContent = 'Nenhum dashboard encontrado.';
-    content.appendChild(vazio);
-  }
-
-  function renderSidebar(){
-    const tree = document.getElementById('tree');
-    tree.innerHTML = '';
-    const grupos = agrupar();
-
-    grupos.forEach((porSub, categoria) => {
-      const total = [...porSub.values()].reduce((soma, arr) => soma + arr.length, 0);
-
-      const detCat = document.createElement('details');
-      detCat.className = 'tree-cat';
-      detCat.open = true;
-      const sumCat = document.createElement('summary');
-      sumCat.innerHTML = `<span>${categoria}</span><span class="count">${total}</span>`;
-      detCat.appendChild(sumCat);
-
-      porSub.forEach((itens, sub) => {
-        let container = detCat;
-
-        if(sub !== '__raiz__'){
-          const detSub = document.createElement('details');
-          detSub.className = 'tree-sub';
-          detSub.open = true;
-          const sumSub = document.createElement('summary');
-          sumSub.innerHTML = `<span>${sub}</span><span class="count">${itens.length}</span>`;
-          detSub.appendChild(sumSub);
-          detCat.appendChild(detSub);
-          container = detSub;
-        }
-
-        itens.forEach(d => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'tree-item';
-          btn.title = d.titulo;
-          btn.dataset.search = normalize([d.categoria, d.subcategoria || '', d.titulo, d.desc].join(' '));
-          btn.innerHTML = `<span class="tree-icon">${d.icone}</span>${d.titulo}`;
-          btn.addEventListener('click', () => focarCard(d.id));
-          container.appendChild(btn);
-        });
-      });
-
-      tree.appendChild(detCat);
-    });
-  }
-
-  function focarCard(id){
-    const card = document.getElementById('card-' + id);
-    if(!card) return;
-    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    card.classList.remove('highlight');
-    void card.offsetWidth; // reinicia a animação
-    card.classList.add('highlight');
-    fecharSidebarMobile();
-  }
-
-  // ---- busca ----
-  const searchInput = document.getElementById('search-input');
-  searchInput.addEventListener('input', () => {
-    const termo = normalize(searchInput.value.trim());
-
-    document.querySelectorAll('.card').forEach(card => {
-      const bate = !termo || card.dataset.search.includes(termo);
-      card.style.display = bate ? '' : 'none';
-    });
-
-    document.querySelectorAll('.sub-block').forEach(sb => {
-      const temVisivel = [...sb.querySelectorAll('.card')].some(c => c.style.display !== 'none');
-      sb.style.display = temVisivel ? '' : 'none';
-    });
-
-    document.querySelectorAll('.cat-block').forEach(cb => {
-      const temVisivel = [...cb.querySelectorAll('.card')].some(c => c.style.display !== 'none');
-      cb.style.display = temVisivel ? '' : 'none';
-    });
-
-    document.querySelectorAll('.tree-item').forEach(item => {
-      const bate = !termo || item.dataset.search.includes(termo);
-      item.style.display = bate ? '' : 'none';
-    });
-
-    document.querySelectorAll('.tree-sub').forEach(sub => {
-      const temVisivel = [...sub.querySelectorAll('.tree-item')].some(i => i.style.display !== 'none');
-      sub.style.display = temVisivel ? '' : 'none';
-      if(termo && temVisivel) sub.open = true;
-    });
-
-    document.querySelectorAll('.tree-cat').forEach(cat => {
-      const temVisivel = [...cat.querySelectorAll('.tree-item')].some(i => i.style.display !== 'none');
-      cat.style.display = temVisivel ? '' : 'none';
-      if(termo && temVisivel) cat.open = true;
-    });
-
-    const algumVisivel = [...document.querySelectorAll('.card')].some(c => c.style.display !== 'none');
-    document.getElementById('empty-state').hidden = algumVisivel;
-  });
-
-  // ---- recolher / expandir (desktop, estilo app) ----
-  const sidebarEl = document.getElementById('sidebar');
-  const btnCollapse = document.getElementById('btn-collapse-sidebar');
-
-  function setCollapsed(colapsado){
-    sidebarEl.classList.toggle('collapsed', colapsado);
-    btnCollapse.setAttribute('aria-label', colapsado ? 'Expandir menu' : 'Recolher menu');
-    btnCollapse.title = colapsado ? 'Expandir menu' : 'Recolher menu';
-    try{ localStorage.setItem('gbs-sidebar-collapsed', colapsado ? '1' : '0'); }catch(e){}
-  }
-
-  btnCollapse.addEventListener('click', () => {
-    setCollapsed(!sidebarEl.classList.contains('collapsed'));
-  });
-
-  document.getElementById('btn-collapsed-search').addEventListener('click', () => {
-    setCollapsed(false);
-    setTimeout(() => searchInput.focus(), 220);
-  });
-
-  // restaura preferência salva (só faz sentido no layout de desktop)
-  try{
-    if(window.innerWidth > 880 && localStorage.getItem('gbs-sidebar-collapsed') === '1'){
-      setCollapsed(true);
-    }
-  }catch(e){}
-
-  // ---- gaveta no mobile ----
-  const overlayEl = document.getElementById('overlay');
-  function abrirSidebarMobile(){
-    sidebarEl.classList.add('open');
-    overlayEl.classList.add('show');
-    document.body.style.overflow = 'hidden';
-  }
-  function fecharSidebarMobile(){
-    sidebarEl.classList.remove('open');
-    overlayEl.classList.remove('show');
-    document.body.style.overflow = '';
-  }
-  document.getElementById('btn-open-sidebar').addEventListener('click', abrirSidebarMobile);
-  document.getElementById('btn-close-sidebar').addEventListener('click', fecharSidebarMobile);
-  overlayEl.addEventListener('click', fecharSidebarMobile);
-
-  renderSidebar();
-  renderConteudo();
-</script>
+<footer>Atualizado manualmente · Grupo GBS</footer>
 
 </body>
 </html>
