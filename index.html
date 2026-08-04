@@ -12,6 +12,8 @@
     --cinza-claro: #F2F2F2;
     --cinza-texto: #6B6B6B;
     --branco: #FFFFFF;
+    --sidebar-w: 250px;
+    --sidebar-w-collapsed: 56px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
@@ -71,50 +73,68 @@
   }
   .btn-menu{ display:none; }
 
-  /* layout geral: sidebar + conteúdo */
-  main{
-    padding: 32px 5vw 60px;
+  /* layout geral: sidebar fixo ao lado + conteúdo */
+  .app{
+    display: flex;
+    align-items: flex-start;
     max-width: 1400px;
     margin: 0 auto;
   }
-  .layout{
-    display: flex;
-    align-items: flex-start;
-    gap: 26px;
-  }
 
-  /* sidebar */
+  /* sidebar estilo app, sempre visível ao lado no desktop */
   .sidebar{
-    width: 250px;
+    width: var(--sidebar-w);
     flex-shrink: 0;
     background: var(--branco);
-    border: 1px solid rgba(0,0,0,0.06);
-    border-radius: 14px;
-    padding: 16px;
+    border-right: 1px solid rgba(0,0,0,0.08);
+    padding: 20px 14px;
     position: sticky;
-    top: 20px;
-    max-height: calc(100vh - 40px);
+    top: 0;
+    height: 100vh;
     overflow-y: auto;
+    transition: width .22s ease;
   }
+  .sidebar.collapsed{ width: var(--sidebar-w-collapsed); padding: 20px 8px; }
+
   .sidebar-header{
     display:flex;
     align-items:center;
     justify-content:space-between;
     font-weight:700;
     font-size:14px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    gap: 6px;
   }
-  #btn-close-sidebar{
-    display:none;
+  .sidebar.collapsed .sidebar-header{ justify-content:center; }
+  .sidebar-title{ white-space: nowrap; overflow:hidden; }
+  .sidebar.collapsed .sidebar-title{ display:none; }
+
+  .sidebar-header-actions{ display:flex; gap:2px; }
+  .icon-btn{
     background:none;
     border:none;
-    font-size:16px;
     cursor:pointer;
+    font-size:14px;
     color: var(--cinza-texto);
-    line-height:1;
+    width:26px;
+    height:26px;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
   }
+  .icon-btn:hover, .icon-btn:focus-visible{ background: var(--cinza-claro); color: var(--preto); outline:none; }
+  #btn-collapse-sidebar{ transition: transform .22s ease; }
+  .sidebar.collapsed #btn-collapse-sidebar{ transform: scaleX(-1); }
+
+  #btn-close-sidebar{ display:none; }
+
+  #btn-collapsed-search{ display:none; margin: 0 auto 14px; }
+  .sidebar.collapsed #btn-collapsed-search{ display:flex; }
 
   .search-box{ margin: 0 0 14px; }
+  .sidebar.collapsed .search-box{ display:none; }
   .search-box input{
     width:100%;
     padding:9px 12px;
@@ -128,6 +148,8 @@
     border-color: var(--verde);
     box-shadow: 0 0 0 3px rgba(149,195,61,.25);
   }
+
+  .sidebar.collapsed .tree{ display:none; }
 
   .tree summary{
     cursor:pointer;
@@ -185,7 +207,10 @@
   .overlay{ display:none; }
 
   /* conteúdo */
-  .content{ flex:1; min-width:0; }
+  .content-wrap{ flex:1; min-width:0; }
+  main{
+    padding: 32px 5vw 60px;
+  }
 
   .section-title{
     font-size: 13px;
@@ -302,12 +327,13 @@
     padding: 20px;
   }
 
-  /* responsivo: sidebar vira gaveta no mobile */
+  /* responsivo: sidebar vira gaveta no mobile (recolher fica desativado) */
   @media (max-width: 880px){
     .btn-menu{ display:inline-flex; }
     #btn-close-sidebar{ display:inline-block; }
+    #btn-collapse-sidebar{ display:none; }
 
-    .layout{ display:block; }
+    .app{ display:block; }
 
     .sidebar{
       position: fixed;
@@ -315,13 +341,19 @@
       left: -300px;
       width: 280px;
       height: 100vh;
-      max-height: 100vh;
-      border-radius: 0;
+      border-right:none;
       z-index: 60;
       transition: left .25s ease;
       box-shadow: 8px 0 24px rgba(0,0,0,.18);
     }
     .sidebar.open{ left: 0; }
+
+    /* neutraliza o estado "recolhido" dentro da gaveta mobile */
+    .sidebar.collapsed{ width: 280px; padding: 20px 14px; }
+    .sidebar.collapsed .sidebar-title,
+    .sidebar.collapsed .search-box,
+    .sidebar.collapsed .tree{ display:block; }
+    .sidebar.collapsed #btn-collapsed-search{ display:none; }
 
     .overlay.show{
       display:block;
@@ -335,38 +367,47 @@
 </head>
 <body>
 
-<header>
-  <div class="eyebrow">Grupo GBS</div>
-  <h1>Dashboards · Gestão de Suprimentos</h1>
-  <p>Relatórios desenvolvidos com Power BI</p>
-  <nav class="top-links">
-    <button id="btn-open-sidebar" class="btn-menu" aria-label="Abrir menu de dashboards">☰ Menu</button>
-    <a href="dashboards.html">▶ Modo TV (Apresentação)</a>
-  </nav>
-</header>
+<div class="app">
 
-<main>
-  <div class="layout">
-
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <span>Dashboards</span>
-        <button id="btn-close-sidebar" aria-label="Fechar menu">✕</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Dashboards</span>
+      <div class="sidebar-header-actions">
+        <button id="btn-collapse-sidebar" class="icon-btn" aria-label="Recolher menu" title="Recolher menu">«</button>
+        <button id="btn-close-sidebar" class="icon-btn" aria-label="Fechar menu">✕</button>
       </div>
-      <div class="search-box">
-        <input type="search" id="search-input" placeholder="Buscar por nome..." aria-label="Buscar dashboard por nome">
-      </div>
-      <nav class="tree" id="tree"><!-- gerado via JS a partir de "dashboards" --></nav>
-    </aside>
+    </div>
 
-    <div class="overlay" id="overlay"></div>
+    <button id="btn-collapsed-search" class="icon-btn" aria-label="Buscar dashboard" title="Buscar dashboard">🔍</button>
 
-    <div class="content" id="content"><!-- gerado via JS a partir de "dashboards" --></div>
+    <div class="search-box" id="search-box">
+      <input type="search" id="search-input" placeholder="Buscar por nome..." aria-label="Buscar dashboard por nome">
+    </div>
 
+    <nav class="tree" id="tree"><!-- gerado via JS a partir de "dashboards" --></nav>
+  </aside>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="content-wrap">
+    <header>
+      <div class="eyebrow">Grupo GBS</div>
+      <h1>Dashboards · Gestão de Suprimentos</h1>
+      <p>Relatórios desenvolvidos com Power BI</p>
+      <nav class="top-links">
+        <button id="btn-open-sidebar" class="btn-menu" aria-label="Abrir menu de dashboards">☰ Menu</button>
+        <a href="dashboards.html">▶ Modo TV (Apresentação)</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="content" id="content"><!-- gerado via JS a partir de "dashboards" --></div>
+    </main>
+
+    <footer>Atualizado manualmente · Grupo GBS</footer>
   </div>
-</main>
 
-<footer>Atualizado manualmente · Grupo GBS</footer>
+</div>
 
 <script>
   // ---------------------------------------------------------------
@@ -380,9 +421,10 @@
       categoria: 'Compras',
       subcategoria: null,
       titulo: 'Pedidos de Compra',
-      desc: 'Análise de histórico de pedidos de compra',
+      desc: 'Análise do histórico de pedidos de compras.',
       url: 'https://app.powerbi.com/view?r=eyJrIjoiZDRiZGYwZmEtMjVkMy00N2I3LTk0YjMtYjZkYmU0NmQ3YTkxIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9',
       thumb: 'assets/thumbs/pedidos-compra.png',
+      icone: null,
       thumbClasse: 'thumb-compras',
       status: 'ativo'
     },
@@ -394,6 +436,7 @@
       desc: 'Comparação entre marcas Pirelli e Michelin',
       url: 'https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574',
       thumb: 'assets/thumbs/estudo-pneus.png',
+      icone: null,
       thumbClasse: 'thumb-pneus',
       status: 'ativo'
     }
@@ -513,6 +556,7 @@
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'tree-item';
+          btn.title = d.titulo;
           btn.dataset.search = normalize([d.categoria, d.subcategoria || '', d.titulo, d.desc].join(' '));
           btn.innerHTML = `<span class="tree-icon">${d.icone}</span>${d.titulo}`;
           btn.addEventListener('click', () => focarCard(d.id));
@@ -575,8 +619,34 @@
     document.getElementById('empty-state').hidden = algumVisivel;
   });
 
-  // ---- gaveta no mobile ----
+  // ---- recolher / expandir (desktop, estilo app) ----
   const sidebarEl = document.getElementById('sidebar');
+  const btnCollapse = document.getElementById('btn-collapse-sidebar');
+
+  function setCollapsed(colapsado){
+    sidebarEl.classList.toggle('collapsed', colapsado);
+    btnCollapse.setAttribute('aria-label', colapsado ? 'Expandir menu' : 'Recolher menu');
+    btnCollapse.title = colapsado ? 'Expandir menu' : 'Recolher menu';
+    try{ localStorage.setItem('gbs-sidebar-collapsed', colapsado ? '1' : '0'); }catch(e){}
+  }
+
+  btnCollapse.addEventListener('click', () => {
+    setCollapsed(!sidebarEl.classList.contains('collapsed'));
+  });
+
+  document.getElementById('btn-collapsed-search').addEventListener('click', () => {
+    setCollapsed(false);
+    setTimeout(() => searchInput.focus(), 220);
+  });
+
+  // restaura preferência salva (só faz sentido no layout de desktop)
+  try{
+    if(window.innerWidth > 880 && localStorage.getItem('gbs-sidebar-collapsed') === '1'){
+      setCollapsed(true);
+    }
+  }catch(e){}
+
+  // ---- gaveta no mobile ----
   const overlayEl = document.getElementById('overlay');
   function abrirSidebarMobile(){
     sidebarEl.classList.add('open');
