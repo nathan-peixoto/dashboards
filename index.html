@@ -89,6 +89,7 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     transition: transform .18s ease, box-shadow .18s ease;
     border: 1px solid rgba(0,0,0,0.04);
+    cursor: pointer;
   }
   .card:hover, .card:focus-visible{
     transform: translateY(-4px);
@@ -195,7 +196,11 @@
   <div class="section-title">Compras</div>
   <div class="grid">
 
-    <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiZDRiZGYwZmEtMjVkMy00N2I3LTk0YjMtYjZkYmU0NmQ3YTkxIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9" target="_blank" rel="noopener">
+    <a class="card"
+       href="https://app.powerbi.com/view?r=eyJrIjoiZDRiZGYwZmEtMjVkMy00N2I3LTk0YjMtYjZkYmU0NmQ3YTkxIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9"
+       data-desktop="https://app.powerbi.com/view?r=eyJrIjoiZDRiZGYwZmEtMjVkMy00N2I3LTk0YjMtYjZkYmU0NmQ3YTkxIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9"
+       data-mobile="null"
+       target="_blank" rel="noopener">
       <div class="card-thumb thumb-compras">
         <img class="thumb-img" src="assets/thumbs/pedidos-compra.png" alt="Prévia do dashboard Pedidos de Compra" onerror="this.remove()">
       </div>
@@ -211,7 +216,11 @@
   <div class="section-title">Borracharia</div>
   <div class="grid">
 
-    <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574" target="_blank" rel="noopener">
+    <a class="card"
+       href="https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574"
+       data-desktop="https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574"
+       data-mobile="null"
+       target="_blank" rel="noopener">
       <div class="card-thumb thumb-compras">
         <img class="thumb-img" src="assets/thumbs/estudo-pneus.png" alt="Prévia do dashboard Estudo de Pneus" onerror="this.remove()">
       </div>
@@ -227,6 +236,32 @@
 </main>
 
 <footer>Atualizado manualmente · Grupo GBS</footer>
+
+<script>
+  // Detecta se o dispositivo é mobile combinando User Agent + largura da tela.
+  function isMobileDevice(){
+    var isMobileUA = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+    var isNarrowScreen = window.innerWidth <= 768;
+    return isMobileUA || isNarrowScreen;
+  }
+
+  // Para cada card, sobrescreve o href padrão (desktop) na hora do clique,
+  // trocando pelo link mobile SE ele já estiver preenchido.
+  // Enquanto data-mobile="null", o card sempre abre o link desktop normalmente.
+  document.querySelectorAll('.card[data-desktop]').forEach(function(card){
+    card.addEventListener('click', function(e){
+      var desktopLink = card.getAttribute('data-desktop');
+      var mobileLink  = card.getAttribute('data-mobile');
+
+      var temLinkMobile = mobileLink && mobileLink !== 'null' && mobileLink.trim() !== '';
+      var destino = (isMobileDevice() && temLinkMobile) ? mobileLink : desktopLink;
+
+      // Impede o comportamento padrão do <a href> e abre manualmente o destino correto
+      e.preventDefault();
+      window.open(destino, '_blank', 'noopener');
+    });
+  });
+</script>
 
 </body>
 </html>
