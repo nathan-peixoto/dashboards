@@ -29,9 +29,10 @@
     e nunca aparece na tela.
 
     O rodapé pode ter uma altura diferente entre desktop e mobile (o app mobile do
-    Power BI costuma renderizar um rodapé um pouco mais alto), então cada relatório
-    pode definir sua própria altura extra via footerHeight na tabela RELATORIOS.
-    Ajuste os valores se o rodapé mudar de tamanho em algum zoom/breakpoint.
+    Power BI costuma renderizar um rodapé um pouco mais alto). Por isso cada
+    relatório define dois valores separados na tabela RELATORIOS:
+    footerHeightDesktop e footerHeightMobile. Ajuste-os se o rodapé mudar de
+    tamanho em algum zoom/breakpoint.
   */
   iframe{
     position: absolute;
@@ -92,21 +93,26 @@
 
     chave:        o "id" usado na URL (viewer.html?id=chave)
     title:        título da aba do navegador / atributo title do iframe
-    srcDesktop:   link do Power BI para desktop (nunca aparece na barra de endereço)
-    srcMobile:    link do Power BI para mobile — se omitido, cai no srcDesktop
-    footerHeight: (opcional) altura em px do rodapé do Power BI pra esse relatório,
-                  caso precise de um valor diferente do padrão de 60px
+    srcDesktop:          link do Power BI para desktop (nunca aparece na barra de endereço)
+    srcMobile:           link do Power BI para mobile — se omitido, cai no srcDesktop
+    footerHeightDesktop: altura em px do rodapé do Power BI na versão desktop desse relatório
+    footerHeightMobile:  altura em px do rodapé do Power BI na versão mobile desse relatório
+                         (o app mobile do Power BI costuma ter um rodapé mais alto que o desktop)
   */
   var RELATORIOS = {
     "pedidos-compra": {
       title: "Pedidos de Compra · Grupo GBS",
       srcDesktop: "https://app.powerbi.com/view?r=eyJrIjoiMDlkNzk5NTQtOTg3My00NGYyLTliNGYtNjI1MGQ1YTU4ZWQ2IiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=20978b144b646948676b",
-      srcMobile:  "https://app.powerbi.com/view?r=eyJrIjoiMDlkNzk5NTQtOTg3My00NGYyLTliNGYtNjI1MGQ1YTU4ZWQ2IiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=2e7ee7e83a7fac58aea8"
+      srcMobile:  "https://app.powerbi.com/view?r=eyJrIjoiMDlkNzk5NTQtOTg3My00NGYyLTliNGYtNjI1MGQ1YTU4ZWQ2IiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=2e7ee7e83a7fac58aea8",
+      footerHeightDesktop: 60,
+      footerHeightMobile: 30
     },
     "estudo-pneus": {
       title: "Estudo de Pneus · Grupo GBS",
-      srcDesktop: "https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574"
+      srcDesktop: "https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574",
       // sem srcMobile ainda: cai automaticamente no srcDesktop até haver uma versão mobile
+      footerHeightDesktop: 60,
+      footerHeightMobile: 60
     }
   };
 
@@ -124,7 +130,9 @@
   if (relatorio) {
     var mobile = isMobileDevice();
     var src = (mobile && relatorio.srcMobile) ? relatorio.srcMobile : relatorio.srcDesktop;
-    var footerHeight = relatorio.footerHeight || 60;
+    var footerHeight = mobile
+      ? (relatorio.footerHeightMobile || 60)
+      : (relatorio.footerHeightDesktop || 60);
 
     document.title = relatorio.title;
 
