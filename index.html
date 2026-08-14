@@ -21,7 +21,6 @@
     min-height: 100vh;
   }
 
-  /* topo */
   header{
     background: var(--preto);
     padding: 28px 5vw 24px;
@@ -86,13 +85,11 @@
     position: relative;
     overflow: hidden;
   }
-  /* variações de cor do topo do card por família de conteúdo — usadas como fundo/fallback enquanto não há imagem */
   .thumb-compras{ background: linear-gradient(135deg, var(--verde), var(--verde-escuro)); }
   .thumb-estoque{ background: linear-gradient(135deg, #4A4A4A, var(--preto)); }
   .thumb-pneus{ background: linear-gradient(135deg, #3E7CB1, #2C5C87); }
   .thumb-desempenho{ background: linear-gradient(135deg, #C99A3E, #A97C28); }
 
-  /* imagem de prévia do dashboard: cobre o gradiente/ícone quando carrega com sucesso */
   .card-thumb .thumb-img{
     position: absolute;
     inset: 0;
@@ -101,7 +98,6 @@
     object-fit: cover;
     object-position: top;
   }
-  /* ícone permanece por baixo como fallback caso a imagem não exista/falhe */
   .card-thumb .thumb-fallback{
     position: relative;
     z-index: 0;
@@ -172,10 +168,15 @@
   <div class="section-title">Compras</div>
   <div class="grid">
 
+    <!--
+      Todos os cards apontam sempre para viewer.html?id=..., tanto no
+      desktop quanto no mobile. É o viewer quem decide internamente (pela
+      detecção de dispositivo) qual link do Power BI carregar e como cortar
+      o rodapé — assim o link real do relatório nunca aparece na barra de
+      endereço em nenhum dos dois casos.
+    -->
     <a class="card"
        href="viewer.html?id=pedidos-compra"
-       data-desktop="viewer.html?id=pedidos-compra"
-       data-mobile="https://app.powerbi.com/view?r=eyJrIjoiMDlkNzk5NTQtOTg3My00NGYyLTliNGYtNjI1MGQ1YTU4ZWQ2IiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=2e7ee7e83a7fac58aea8"
        target="_blank" rel="noopener">
       <div class="card-thumb thumb-compras">
         <img class="thumb-img" src="assets/thumbs/pedidos-compra.png" alt="Prévia do dashboard Pedidos de Compra" onerror="this.remove()">
@@ -194,8 +195,6 @@
 
     <a class="card"
        href="viewer.html?id=estudo-pneus"
-       data-desktop="viewer.html?id=estudo-pneus"
-       data-mobile="null"
        target="_blank" rel="noopener">
       <div class="card-thumb thumb-compras">
         <img class="thumb-img" src="assets/thumbs/estudo-pneus.png" alt="Prévia do dashboard Estudo de Pneus" onerror="this.remove()">
@@ -212,32 +211,6 @@
 </main>
 
 <footer>Atualizado manualmente · Grupo GBS</footer>
-
-<script>
-  // Detecta se o dispositivo é mobile combinando User Agent + largura da tela.
-  function isMobileDevice(){
-    var isMobileUA = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
-    var isNarrowScreen = window.innerWidth <= 768;
-    return isMobileUA || isNarrowScreen;
-  }
-
-  // Para cada card, sobrescreve o href padrão (desktop) na hora do clique,
-  // trocando pelo link mobile SE ele já estiver preenchido.
-  // Enquanto data-mobile="null", o card sempre abre o link desktop normalmente.
-  document.querySelectorAll('.card[data-desktop]').forEach(function(card){
-    card.addEventListener('click', function(e){
-      var desktopLink = card.getAttribute('data-desktop');
-      var mobileLink  = card.getAttribute('data-mobile');
-
-      var temLinkMobile = mobileLink && mobileLink !== 'null' && mobileLink.trim() !== '';
-      var destino = (isMobileDevice() && temLinkMobile) ? mobileLink : desktopLink;
-
-      // Impede o comportamento padrão do <a href> e abre manualmente o destino correto
-      e.preventDefault();
-      window.open(destino, '_blank', 'noopener');
-    });
-  });
-</script>
 
 </body>
 </html>
