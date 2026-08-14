@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · Grupo GBS</title>
+<style>
+  html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: #262626;
+    font-family: -apple-system, "Inter", "Segoe UI", Roboto, sans-serif;
+  }
+
+  .frame-wrap{
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /*
+    O iframe é renderizado mais alto do que a tela (altura real do relatório + a
+    altura do rodapé "Microsoft Power BI"). Como o container pai tem overflow:hidden
+    e altura fixa em 100vh, esse excesso na parte de baixo (o rodapé) fica cortado
+    e nunca aparece na tela. Ajuste FOOTER_HEIGHT abaixo se o rodapé do relatório
+    tiver uma altura diferente de 40px no zoom padrão.
+  */
+  iframe{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 40px); /* FOOTER_HEIGHT = 40px */
+    border: 0;
+    display: block;
+  }
+
+  /* tela de erro, exibida se o ?id= não existir na tabela de relatórios */
+  .erro{
+    display: none;
+    height: 100%;
+    color: #F2F2F2;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    padding: 24px;
+  }
+  .erro h1{
+    font-size: 18px;
+    color: #95C33D;
+  }
+  .erro p{
+    font-size: 14px;
+    color: #B5B5B5;
+    max-width: 420px;
+  }
+  .erro.ativo{ display: flex; }
+</style>
+</head>
+<body>
+
+<div class="frame-wrap" id="frameWrap">
+  <iframe id="reportFrame" title="" allowfullscreen></iframe>
+</div>
+
+<div class="erro" id="erroBox">
+  <h1>Dashboard não encontrado</h1>
+  <p>O identificador informado na URL não corresponde a nenhum relatório cadastrado. Verifique o link ou volte para a página de dashboards.</p>
+</div>
+
+<script>
+  /*
+    TABELA DE RELATÓRIOS
+    ---------------------
+    Para adicionar um novo dashboard no futuro, basta acrescentar uma entrada
+    aqui — não é preciso criar nenhum arquivo .html novo.
+
+    chave:  o "id" usado na URL (viewer.html?id=chave)
+    title:  título da aba do navegador / atributo title do iframe
+    src:    link real do Power BI (fica só aqui, nunca aparece na barra de endereço)
+  */
+  var RELATORIOS = {
+    "pedidos-compra": {
+      title: "Pedidos de Compra · Grupo GBS",
+      src: "https://app.powerbi.com/view?r=eyJrIjoiMmM0YjU0NGMtYmI2Ni00MzdmLTg3MzktN2RkZGZjMDM5ZWFkIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9"
+    },
+    "estudo-pneus": {
+      title: "Estudo de Pneus · Grupo GBS",
+      src: "https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574"
+    }
+  };
+
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get("id");
+  var relatorio = id ? RELATORIOS[id] : null;
+
+  if (relatorio) {
+    document.title = relatorio.title;
+    var frame = document.getElementById("reportFrame");
+    frame.setAttribute("title", relatorio.title);
+    frame.setAttribute("src", relatorio.src);
+  } else {
+    document.getElementById("frameWrap").style.display = "none";
+    document.getElementById("erroBox").classList.add("ativo");
+  }
+</script>
+
+</body>
+</html>
