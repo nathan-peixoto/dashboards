@@ -26,17 +26,21 @@
     O iframe é renderizado mais alto do que a tela (altura real do relatório + a
     altura do rodapé "Microsoft Power BI"). Como o container pai tem overflow:hidden
     e altura fixa em 100vh, esse excesso na parte de baixo (o rodapé) fica cortado
-    e nunca aparece na tela. Ajuste FOOTER_HEIGHT abaixo se o rodapé do relatório
-    tiver uma altura diferente de 40px no zoom padrão.
+    e nunca aparece na tela.
+
+    O rodapé pode ter uma altura diferente entre desktop e mobile (o app mobile do
+    Power BI costuma renderizar um rodapé um pouco mais alto), então cada relatório
+    pode definir sua própria altura extra via footerHeight na tabela RELATORIOS.
+    Ajuste os valores se o rodapé mudar de tamanho em algum zoom/breakpoint.
   */
   iframe{
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% + 60px); /* FOOTER_HEIGHT = 60px */
     border: 0;
     display: block;
+    height: calc(100% + var(--footer-height, 60px));
   }
 
   /* tela de erro, exibida se o ?id= não existir na tabela de relatórios */
@@ -86,30 +90,48 @@
     Para adicionar um novo dashboard no futuro, basta acrescentar uma entrada
     aqui — não é preciso criar nenhum arquivo .html novo.
 
-    chave:  o "id" usado na URL (viewer.html?id=chave)
-    title:  título da aba do navegador / atributo title do iframe
-    src:    link real do Power BI (fica só aqui, nunca aparece na barra de endereço)
+    chave:        o "id" usado na URL (viewer.html?id=chave)
+    title:        título da aba do navegador / atributo title do iframe
+    srcDesktop:   link do Power BI para desktop (nunca aparece na barra de endereço)
+    srcMobile:    link do Power BI para mobile — se omitido, cai no srcDesktop
+    footerHeight: (opcional) altura em px do rodapé do Power BI pra esse relatório,
+                  caso precise de um valor diferente do padrão de 60px
   */
   var RELATORIOS = {
     "pedidos-compra": {
       title: "Pedidos de Compra · Grupo GBS",
-      src: "https://app.powerbi.com/view?r=eyJrIjoiMDlkNzk5NTQtOTg3My00NGYyLTliNGYtNjI1MGQ1YTU4ZWQ2IiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=20978b144b646948676b"
+      srcDesktop: "https://app.powerbi.com/view?r=eyJrIjoiMDlkNzk5NTQtOTg3My00NGYyLTliNGYtNjI1MGQ1YTU4ZWQ2IiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=20978b144b646948676b",
+      srcMobile:  "https://app.powerbi.com/view?r=eyJrIjoiMDlkNzk5NTQtOTg3My00NGYyLTliNGYtNjI1MGQ1YTU4ZWQ2IiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=2e7ee7e83a7fac58aea8"
     },
     "estudo-pneus": {
       title: "Estudo de Pneus · Grupo GBS",
-      src: "https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574"
+      srcDesktop: "https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574"
+      // sem srcMobile ainda: cai automaticamente no srcDesktop até haver uma versão mobile
     }
   };
+
+  // Mesma lógica de detecção usada no índice, pra manter consistência entre as páginas.
+  function isMobileDevice(){
+    var isMobileUA = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+    var isNarrowScreen = window.innerWidth <= 768;
+    return isMobileUA || isNarrowScreen;
+  }
 
   var params = new URLSearchParams(window.location.search);
   var id = params.get("id");
   var relatorio = id ? RELATORIOS[id] : null;
 
   if (relatorio) {
+    var mobile = isMobileDevice();
+    var src = (mobile && relatorio.srcMobile) ? relatorio.srcMobile : relatorio.srcDesktop;
+    var footerHeight = relatorio.footerHeight || 60;
+
     document.title = relatorio.title;
+
     var frame = document.getElementById("reportFrame");
+    frame.style.setProperty("--footer-height", footerHeight + "px");
     frame.setAttribute("title", relatorio.title);
-    frame.setAttribute("src", relatorio.src);
+    frame.setAttribute("src", src);
   } else {
     document.getElementById("frameWrap").style.display = "none";
     document.getElementById("erroBox").classList.add("ativo");
