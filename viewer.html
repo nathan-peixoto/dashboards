@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
 <title>Dashboard · Grupo GBS</title>
 <style>
   html, body{
@@ -18,14 +20,15 @@
   .frame-wrap{
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 100vh;   /* fallback */
+    height: 100dvh;  /* mobile: ignora a barra de endereço dinâmica */
     overflow: hidden;
   }
 
   /*
     O iframe é renderizado mais alto do que a tela (altura real do relatório + a
     altura do rodapé "Microsoft Power BI"). Como o container pai tem overflow:hidden
-    e altura fixa em 100vh, esse excesso na parte de baixo (o rodapé) fica cortado
+    e altura fixa, esse excesso na parte de baixo (o rodapé) fica cortado
     e nunca aparece na tela.
 
     O rodapé pode ter uma altura diferente entre desktop e mobile (o app mobile do
@@ -65,6 +68,14 @@
     color: #B5B5B5;
     max-width: 420px;
   }
+  .erro a{
+    margin-top: 6px;
+    color: #95C33D;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .erro a:hover, .erro a:focus-visible{ text-decoration: underline; }
   .erro.ativo{ display: flex; }
 </style>
 </head>
@@ -73,7 +84,7 @@
 <div class="frame-wrap" id="frameWrap">
   <iframe
     id="reportFrame"
-    title=""
+    title="Dashboard Grupo GBS"
     allowfullscreen
     sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox">
   </iframe>
@@ -82,6 +93,7 @@
 <div class="erro" id="erroBox">
   <h1>Dashboard não encontrado</h1>
   <p>O identificador informado na URL não corresponde a nenhum relatório cadastrado. Verifique o link ou volte para a página de dashboards.</p>
+  <a href="index.html">← Voltar para os dashboards</a>
 </div>
 
 <script>
@@ -89,12 +101,13 @@
     TABELA DE RELATÓRIOS
     ---------------------
     Para adicionar um novo dashboard no futuro, basta acrescentar uma entrada
-    aqui — não é preciso criar nenhum arquivo .html novo.
+    aqui (e o card correspondente no index.html) — não é preciso criar nenhum
+    arquivo .html novo.
 
     chave:        o "id" usado na URL (viewer.html?id=chave)
     title:        título da aba do navegador / atributo title do iframe
     srcDesktop:          link do Power BI para desktop (nunca aparece na barra de endereço)
-    srcMobile:           link do Power BI para mobile — se omitido, cai no srcDesktop
+    srcMobile:           link do Power BI para mobile — se null, cai no srcDesktop
     footerHeightDesktop: altura em px do rodapé do Power BI na versão desktop desse relatório
     footerHeightMobile:  altura em px do rodapé do Power BI na versão mobile desse relatório
                          (o app mobile do Power BI costuma ter um rodapé mais alto que o desktop)
@@ -121,6 +134,13 @@
       footerHeightDesktop: 60,
       footerHeightMobile: 30
     },
+    "posicao-estoque": {
+      title: "Posição do Estoque · Grupo GBS",
+      srcDesktop: "https://app.powerbi.com/view?r=eyJrIjoiODQ0Y2Q2MjctN2U5Yy00MmRkLWI1YmMtYTEzMDEwMDhjN2ExIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=63da9a53148a46baa8ff",
+      srcMobile:  null,
+      footerHeightDesktop: 60,
+      footerHeightMobile: 30
+    },
     "estudo-pneus": {
       title: "Estudo de Pneus · Grupo GBS",
       srcDesktop: "https://app.powerbi.com/view?r=eyJrIjoiMmJjNGViZDUtZjQ4YS00YTgyLTk1YmQtYzM5YTMyNmZkY2ViIiwidCI6IjVmM2MyYmZjLTE5ZjktNDkyZC1hNTRhLWZkODJhNWRkNjMzOCJ9&pageName=23264a554ea505406574",
@@ -130,23 +150,26 @@
     }
   };
 
-  // Mesma lógica de detecção usada no índice, pra manter consistência entre as páginas.
+  // Detecção de dispositivo (mobile por user agent ou tela estreita).
   function isMobileDevice(){
     var isMobileUA = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
     var isNarrowScreen = window.innerWidth <= 768;
     return isMobileUA || isNarrowScreen;
   }
 
+  // Usa o valor informado (inclusive 0); só cai no padrão se não for um número válido.
+  function alturaRodape(valor){
+    return (typeof valor === "number" && isFinite(valor) && valor >= 0) ? valor : 60;
+  }
+
   var params = new URLSearchParams(window.location.search);
   var id = params.get("id");
-  var relatorio = id ? RELATORIOS[id] : null;
+  var relatorio = (id && Object.prototype.hasOwnProperty.call(RELATORIOS, id)) ? RELATORIOS[id] : null;
 
   if (relatorio) {
     var mobile = isMobileDevice();
     var src = (mobile && relatorio.srcMobile) ? relatorio.srcMobile : relatorio.srcDesktop;
-    var footerHeight = mobile
-      ? (relatorio.footerHeightMobile || 60)
-      : (relatorio.footerHeightDesktop || 60);
+    var footerHeight = alturaRodape(mobile ? relatorio.footerHeightMobile : relatorio.footerHeightDesktop);
 
     document.title = relatorio.title;
 
