@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>Dashboards · Gestão de Suprimentos</title>
 <style>
   :root{
@@ -88,8 +89,9 @@
   .thumb-compras{ background: linear-gradient(135deg, var(--verde), var(--verde-escuro)); }
   .thumb-estoque{ background: linear-gradient(135deg, #4A4A4A, var(--preto)); }
   .thumb-pneus{ background: linear-gradient(135deg, #3E7CB1, #2C5C87); }
-  .thumb-desempenho{ background: linear-gradient(135deg, #C99A3E, #A97C28); }
 
+  /* A imagem cobre o ícone. Se a imagem não carregar (onerror remove a <img>),
+     o ícone de fallback aparece sobre o gradiente. */
   .card-thumb .thumb-img{
     position: absolute;
     inset: 0;
@@ -97,6 +99,7 @@
     height: 100%;
     object-fit: cover;
     object-position: top;
+    z-index: 1;
   }
   .card-thumb .thumb-fallback{
     position: relative;
@@ -179,6 +182,7 @@
        href="viewer.html?id=pedidos-compra"
        target="_blank" rel="noopener">
       <div class="card-thumb thumb-compras">
+        <span class="thumb-fallback" aria-hidden="true">🛒</span>
         <img class="thumb-img" src="assets/thumbs/pedidos-compra.png" alt="Prévia do dashboard Pedidos de Compra" onerror="this.remove()">
       </div>
       <div class="card-body">
@@ -189,9 +193,10 @@
     </a>
 
     <a class="card"
-      href="viewer.html?id=fluxo-compras"
-      target="_blank" rel="noopener">
+       href="viewer.html?id=fluxo-compras"
+       target="_blank" rel="noopener">
       <div class="card-thumb thumb-compras">
+        <span class="thumb-fallback" aria-hidden="true">🛒</span>
         <img class="thumb-img" src="assets/thumbs/fluxo-compras.png" alt="Prévia do dashboard Fluxo de Compras" onerror="this.remove()">
       </div>
       <div class="card-body">
@@ -202,14 +207,34 @@
     </a>
 
     <a class="card"
-      href="viewer.html?id=pecas-estoque"
-      target="_blank" rel="noopener">
+       href="viewer.html?id=pecas-estoque"
+       target="_blank" rel="noopener">
       <div class="card-thumb thumb-compras">
-        <img class="thumb-img" src="assets/thumbs/fluxo-compras.png" alt="Prévia do dashboard Relatório Gerencial" onerror="this.remove()">
+        <span class="thumb-fallback" aria-hidden="true">🛒</span>
+        <img class="thumb-img" src="assets/thumbs/compras-pecas.png" alt="Prévia do dashboard Relatório Gerencial" onerror="this.remove()">
       </div>
       <div class="card-body">
         <h3>Relatório Gerencial</h3>
         <span class="desc">Peças e Posição de Estoque</span>
+        <span class="status ativo">Acessar</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-title">Estoque</div>
+  <div class="grid">
+
+    <a class="card"
+       href="viewer.html?id=posicao-estoque"
+       target="_blank" rel="noopener">
+      <div class="card-thumb thumb-estoque">
+        <span class="thumb-fallback" aria-hidden="true">📦</span>
+        <img class="thumb-img" src="assets/thumbs/posicao-estoque.png" alt="Prévia do dashboard Posição do Estoque" onerror="this.remove()">
+      </div>
+      <div class="card-body">
+        <h3>Posição do Estoque</h3>
+        <span class="desc">Posição atual dos itens em estoque</span>
         <span class="status ativo">Acessar</span>
       </div>
     </a>
@@ -222,7 +247,8 @@
     <a class="card"
        href="viewer.html?id=estudo-pneus"
        target="_blank" rel="noopener">
-      <div class="card-thumb thumb-compras">
+      <div class="card-thumb thumb-pneus">
+        <span class="thumb-fallback" aria-hidden="true">🛞</span>
         <img class="thumb-img" src="assets/thumbs/estudo-pneus.png" alt="Prévia do dashboard Estudo de Pneus" onerror="this.remove()">
       </div>
       <div class="card-body">
